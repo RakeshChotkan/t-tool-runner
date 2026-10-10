@@ -4,7 +4,7 @@
 x-runner: &runner
   image: ghcr.io/rakeshchotkan/t-tool-runner:latest
   restart: always
-  cpus: 2
+  # Geen cpus-limiet: de Synology-kernel ondersteunt geen CPU CFS-scheduler.
   mem_limit: 6g
   environment: &env
     REPO_URL: https://github.com/RakeshChotkan/t-tool
