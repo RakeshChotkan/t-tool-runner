@@ -1,0 +1,29 @@
+# Portainer-stack "t-tool-runners": twee ephemeral runners (parallel) voor RakeshChotkan/t-tool.
+# Zet GITHUB_TOKEN als omgevingsvariabele in Portainer (fine-grained token, alleen repo t-tool,
+# permissie Administration: read and write). Geen docker.sock: de tests hebben dat niet nodig.
+x-runner: &runner
+  image: ghcr.io/rakeshchotkan/t-tool-runner:latest
+  restart: always
+  cpus: 2
+  mem_limit: 6g
+  environment: &env
+    REPO_URL: https://github.com/RakeshChotkan/t-tool
+    ACCESS_TOKEN: ${GITHUB_TOKEN}
+    EPHEMERAL: "true"
+    RUN_AS_ROOT: "false"
+    LABELS: t-tool
+    TZ: Europe/Amsterdam
+
+services:
+  runner-1:
+    <<: *runner
+    container_name: t-tool-runner-1
+    environment:
+      <<: *env
+      RUNNER_NAME_PREFIX: nas-1
+  runner-2:
+    <<: *runner
+    container_name: t-tool-runner-2
+    environment:
+      <<: *env
+      RUNNER_NAME_PREFIX: nas-2
